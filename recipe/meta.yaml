@@ -22,7 +22,6 @@ requirements:
     - {{ compiler("cuda") }}
     - {{ stdlib("c") }}
     - cmake
-    - cuda-toolkit
     - ninja
     - pip         # [build_platform!= target_platform]
     - pybind11    # [build_platform!= target_platform]
@@ -31,7 +30,11 @@ requirements:
     - setuptools  # [build_platform!= target_platform]
   host:
     - cuda-version {{ cuda_compiler_version }}
-    - cuda-toolkit
+    - cuda-cudart-dev
+    - libcublas-dev
+    - libcurand-dev
+    - libcusolver-dev
+    - libcusparse-dev
     - pip
     - python
     - pytorch
