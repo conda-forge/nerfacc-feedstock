@@ -10,7 +10,7 @@ source:
     sha256: 01850cbbd71b6aeab059cbfb695755f8b6604f3fdfe48c44925b4b97c0c324db
 
 build:
-  number: 6
+  number: 7
   skip: true  # [cuda_compiler_version == "None"]
   skip: true  # [cuda_compiler_version == "11.8"]
   skip: true  # [win]
@@ -22,7 +22,6 @@ requirements:
     - {{ compiler("cuda") }}
     - {{ stdlib("c") }}
     - cmake
-    - cuda-toolkit
     - ninja
     - pip         # [build_platform!= target_platform]
     - pybind11    # [build_platform!= target_platform]
@@ -31,7 +30,11 @@ requirements:
     - setuptools  # [build_platform!= target_platform]
   host:
     - cuda-version {{ cuda_compiler_version }}
-    - cuda-toolkit
+    - cuda-cudart-dev
+    - libcublas-dev
+    - libcurand-dev
+    - libcusolver-dev
+    - libcusparse-dev
     - pip
     - python
     - pytorch
