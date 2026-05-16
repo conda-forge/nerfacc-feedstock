@@ -1,0 +1,78 @@
+schema_version: 1
+
+context:
+  name: nerfacc
+  version: "0.5.3"
+  build_number: 9
+
+package:
+  name: ${{ name|lower }}
+  version: ${{ version }}
+
+source:
+  - url: https://pypi.org/packages/source/n/nerfacc/nerfacc-${{ version }}.tar.gz
+    sha256: 01850cbbd71b6aeab059cbfb695755f8b6604f3fdfe48c44925b4b97c0c324db
+
+build:
+  number: ${{ build_number }}
+  skip:
+    - cuda_compiler_version == "None" or cuda_compiler_version == "11.8" or win
+  script:
+    file: build.sh
+
+requirements:
+  build:
+    - ${{ compiler("c") }}
+    - ${{ compiler("cxx") }}
+    - if: cuda_compiler_version != "None"
+      then: ${{ compiler("cuda") }}
+    - ${{ stdlib("c") }}
+    - cmake
+    - ninja
+    - if: build_platform != target_platform
+      then:
+        - pip
+        - pybind11
+        - python
+        - "pytorch 2.10.* *cuda*"
+        - setuptools
+  host:
+    - if: cuda_compiler_version != "None"
+      then: cuda-version ==${{ cuda_compiler_version }}
+    - if: cuda_compiler_version != "None"
+      then: cuda-cudart-dev
+    - if: cuda_compiler_version != "None"
+      then: libcublas-dev
+    - if: cuda_compiler_version != "None"
+      then: libcurand-dev
+    - if: cuda_compiler_version != "None"
+      then: libcusolver-dev
+    - if: cuda_compiler_version != "None"
+      then: libcusparse-dev
+    - pip
+    - python
+    - "pytorch 2.10.* *cuda*"
+    - setuptools
+  run:
+    - if: cuda_compiler_version != "None"
+      then: cuda-cudart
+    - python
+    - "pytorch 2.10.* *cuda*"
+    - rich >=12
+    - typing_extensions
+
+tests:
+  - python:
+      imports:
+        - nerfacc
+      pip_check: true
+
+about:
+  homepage: https://github.com/nerfstudio-project/nerfacc
+  summary: A General NeRF Acceleration Toolbox in PyTorch
+  license: MIT
+  license_file: LICENSE
+
+extra:
+  recipe-maintainers:
+    - jeongseok-meta
