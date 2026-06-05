@@ -3,7 +3,7 @@ schema_version: 1
 context:
   name: nerfacc
   version: "0.5.3"
-  build_number: 9
+  build_number: 10
 
 package:
   name: ${{ name|lower }}
@@ -41,17 +41,13 @@ requirements:
         - setuptools
   host:
     - if: cuda_compiler_version != "None"
-      then: cuda-version ==${{ cuda_compiler_version }}
-    - if: cuda_compiler_version != "None"
-      then: cuda-cudart-dev
-    - if: cuda_compiler_version != "None"
-      then: libcublas-dev
-    - if: cuda_compiler_version != "None"
-      then: libcurand-dev
-    - if: cuda_compiler_version != "None"
-      then: libcusolver-dev
-    - if: cuda_compiler_version != "None"
-      then: libcusparse-dev
+      then:
+        - cuda-version ==${{ cuda_compiler_version }}
+        - cuda-cudart-dev
+        - libcublas-dev
+        - libcurand-dev
+        - libcusolver-dev
+        - libcusparse-dev
     - pip
     - python
     - "pytorch 2.10.* *cuda*"
