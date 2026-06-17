@@ -12,6 +12,8 @@ package:
 source:
   - url: https://pypi.org/packages/source/n/nerfacc/nerfacc-${{ version }}.tar.gz
     sha256: 01850cbbd71b6aeab059cbfb695755f8b6604f3fdfe48c44925b4b97c0c324db
+    patches:
+      - patches/0001-Avoid-std-lerp-conflict.patch
 
 build:
   number: ${{ build_number }}

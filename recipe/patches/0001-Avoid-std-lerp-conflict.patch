@@ -1,0 +1,15 @@
+--- nerfacc/cuda/csrc/include/utils_math.cuh
++++ nerfacc/cuda/csrc/include/utils_math.cuh
+@@ -1142,10 +1142,12 @@
+ // - linear interpolation between a and b, based on value t in [0, 1] range
+ ////////////////////////////////////////////////////////////////////////////////
+ 
++#if __cplusplus < 202002L
+ inline __device__ __host__ float lerp(float a, float b, float t)
+ {
+     return a + t * (b - a);
+ }
++#endif
+ inline __device__ __host__ float2 lerp(float2 a, float2 b, float t)
+ {
+     return a + t * (b - a);
