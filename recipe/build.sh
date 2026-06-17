@@ -10,4 +10,4 @@ fi
 
 export CUDA_HOME="${BUILD_PREFIX}"
 
-$PYTHON -m pip install . -vv --no-deps --no-build-isolation
+python -m pip install . -vv --no-deps --no-build-isolation
