@@ -3,7 +3,7 @@ schema_version: 1
 context:
   name: nerfacc
   version: "0.5.3"
-  build_number: 10
+  build_number: 11
 
 package:
   name: ${{ name|lower }}
@@ -12,12 +12,14 @@ package:
 source:
   - url: https://pypi.org/packages/source/n/nerfacc/nerfacc-${{ version }}.tar.gz
     sha256: 01850cbbd71b6aeab059cbfb695755f8b6604f3fdfe48c44925b4b97c0c324db
+    patches:
+      - patches/0001-Avoid-std-lerp-conflict.patch
 
 build:
   number: ${{ build_number }}
   # Upstream only provides a CUDA extension. Keep no-CUDA and Windows variants
   # disabled until the PyTorch/CUDA compiler stack can build and test them here;
-  # CUDA 11.8 is outside this feedstock's current PyTorch 2.10 CUDA matrix.
+  # CUDA 11.8 is outside this feedstock's current PyTorch CUDA matrix.
   skip:
     - cuda_compiler_version == "None" or cuda_compiler_version == "11.8" or win
   script:
@@ -34,10 +36,11 @@ requirements:
     - ninja
     - if: build_platform != target_platform
       then:
+        - cross-python_${{ target_platform }}
         - pip
         - pybind11
         - python
-        - "pytorch 2.10.* *cuda*"
+        - "pytorch ${{ pytorch }}.* *cuda*"
         - setuptools
   host:
     - if: cuda_compiler_version != "None"
@@ -50,13 +53,13 @@ requirements:
         - libcusparse-dev
     - pip
     - python
-    - "pytorch 2.10.* *cuda*"
+    - "pytorch ${{ pytorch }}.* *cuda*"
     - setuptools
   run:
     - if: cuda_compiler_version != "None"
       then: cuda-cudart
     - python
-    - "pytorch 2.10.* *cuda*"
+    - "pytorch ${{ pytorch }}.* *cuda*"
     - rich >=12
     - typing_extensions
 
