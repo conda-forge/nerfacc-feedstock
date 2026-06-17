@@ -17,7 +17,7 @@ build:
   number: ${{ build_number }}
   # Upstream only provides a CUDA extension. Keep no-CUDA and Windows variants
   # disabled until the PyTorch/CUDA compiler stack can build and test them here;
-  # CUDA 11.8 is outside this feedstock's current PyTorch 2.10 CUDA matrix.
+  # CUDA 11.8 is outside this feedstock's current PyTorch CUDA matrix.
   skip:
     - cuda_compiler_version == "None" or cuda_compiler_version == "11.8" or win
   script:
@@ -37,7 +37,7 @@ requirements:
         - pip
         - pybind11
         - python
-        - "pytorch 2.10.* *cuda*"
+        - "pytorch ${{ pytorch }}.* *cuda*"
         - setuptools
   host:
     - if: cuda_compiler_version != "None"
@@ -50,13 +50,13 @@ requirements:
         - libcusparse-dev
     - pip
     - python
-    - "pytorch 2.10.* *cuda*"
+    - "pytorch ${{ pytorch }}.* *cuda*"
     - setuptools
   run:
     - if: cuda_compiler_version != "None"
       then: cuda-cudart
     - python
-    - "pytorch 2.10.* *cuda*"
+    - "pytorch ${{ pytorch }}.* *cuda*"
     - rich >=12
     - typing_extensions
 
