@@ -3,7 +3,7 @@ schema_version: 1
 context:
   name: nerfacc
   version: "0.5.3"
-  build_number: 11
+  build_number: 12
 
 package:
   name: ${{ name|lower }}
