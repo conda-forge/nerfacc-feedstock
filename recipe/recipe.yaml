@@ -3,7 +3,7 @@ schema_version: 1
 context:
   name: nerfacc
   version: "0.5.3"
-  build_number: 12
+  build_number: 13
 
 package:
   name: ${{ name|lower }}
@@ -17,13 +17,15 @@ source:
 
 build:
   number: ${{ build_number }}
-  # Upstream only provides a CUDA extension. Keep no-CUDA and Windows variants
-  # disabled until the PyTorch/CUDA compiler stack can build and test them here;
-  # CUDA 11.8 is outside this feedstock's current PyTorch CUDA matrix.
+  # Upstream only provides a CUDA extension. CUDA 11.8 is outside this
+  # feedstock's current PyTorch CUDA matrix.
   skip:
-    - cuda_compiler_version == "None" or cuda_compiler_version == "11.8" or win
+    - cuda_compiler_version == "None" or cuda_compiler_version == "11.8"
+    # PyTorch 2.13's Windows CUDA 12 build is pinned to CUDA 12.8, while the
+    # conda-forge compiler matrix currently provides 12.9 and 13.0 here.
+    - win and cuda_compiler_version != "13.0"
   script:
-    file: build.sh
+    file: ${{ "build.bat" if win else "build.sh" }}
 
 requirements:
   build:
@@ -76,5 +78,6 @@ about:
   license_file: LICENSE
 
 extra:
+  feedstock-name: nerfacc
   recipe-maintainers:
     - jeongseok-meta
