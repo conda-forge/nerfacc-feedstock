@@ -21,9 +21,9 @@ build:
   # feedstock's current PyTorch CUDA matrix.
   skip:
     - cuda_compiler_version == "None" or cuda_compiler_version == "11.8"
-    # PyTorch 2.13's Windows CUDA 12 build is pinned to CUDA 12.8, while the
-    # conda-forge compiler matrix currently provides 12.9 and 13.0 here.
-    - win and cuda_compiler_version != "13.0"
+    # PyTorch's Windows CUDA 12 build is pinned to CUDA 12.8, while the
+    # conda-forge compiler matrix provides 12.9 here. Build Windows CUDA 13 only.
+    - win and not match(cuda_compiler_version, "13.*")
   script:
     file: ${{ "build.bat" if win else "build.sh" }}
 
