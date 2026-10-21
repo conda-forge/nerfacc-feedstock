@@ -57,6 +57,11 @@ requirements:
     - python
     - "pytorch ${{ pytorch }}.* *cuda*"
     - setuptools
+    # nerfacc builds without ninja, so on Windows PyTorch sends .cu files to nvcc
+    # by patching Compiler.spawn, which setuptools 84 no longer calls. Remove
+    # once torch.utils.cpp_extension also handles Compiler.call.
+    - if: win
+      then: setuptools <84
   run:
     - if: cuda_compiler_version != "None"
       then: cuda-cudart
